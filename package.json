@@ -1,0 +1,24 @@
+{
+  "name": "who-hacks",
+  "version": "1.0.0",
+  "description": "An app to search hacker news on the Algolia API, with session history.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hamlettjd/who-hacks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hamlettjd/who-hacks/issues"
+  },
+  "homepage": "https://github.com/hamlettjd/who-hacks#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
