@@ -5,13 +5,11 @@ import History from './components/History';
 const Main = (props) => {
   return (
     <Routes>
-
       <Route path="/" element={<Search />} />
 
-      <Route path="/search" element={<Search />} />
+      <Route path="/search" element={<Search {...props} />} />
 
-      <Route path="/history" element={<History />} />
-
+      <Route path="/history" element={<History {...props} />} />
     </Routes>
   );
 };
