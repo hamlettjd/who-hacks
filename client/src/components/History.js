@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 import Results from './Results';
 import Button from 'react-bootstrap/Button';
@@ -6,21 +7,25 @@ import Button from 'react-bootstrap/Button';
 const History = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const resultHistory = state.resultHistory;
-  console.log('History component:');
-  console.log(state);
+  const [resultHistory] = useState(state.resultHistory);
   let formattedHistory = [];
+
+  //? populate search term and results for each search performed by end user.
+  let searchIndex = 0;
   for (let searchName in resultHistory) {
-    console.log(searchName);
+    searchIndex++;
     formattedHistory.push(
-      <div key={searchName}>
+      <div key={searchName + 1}>
         <hr />
-        <h2>Search Term: {searchName}</h2>
+        <h2>
+          # {searchIndex}: {searchName}
+        </h2>
         <Results searchResults={resultHistory[searchName]} />
         <hr />
       </div>
     );
   }
+
   return (
     <div className="container-fluid bg-dark text-light p-5">
       <h1 className="text-center">History</h1>
@@ -28,7 +33,6 @@ const History = () => {
         variant="primary"
         onClick={(e) => {
           e.preventDefault();
-          console.log(state);
           navigate('/search', { state: { resultHistory } });
         }}
       >

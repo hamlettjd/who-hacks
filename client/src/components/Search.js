@@ -1,23 +1,29 @@
-//? functional components
-import Results from './Results';
-
-//? for state management / time travel
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-
 //? styling
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import coolImage from '../images/cool-hacker-img.jpg'; //? using a royalty free image at the bottom to add a little flavor.
 
+//? functional components
+import Results from './Results';
+
+//? for state management / time travel
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 const Search = () => {
+  const { state } = useLocation();
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState({});
-  const [resultHistory, setResultHistory] = useState([]);
+  let prevHistory = [];
+  try {
+    //? add history from history route if exists
+    prevHistory = state.resultHistory ? state.resultHistory : prevHistory;
+  } catch (err) {}
+  const [resultHistory, setResultHistory] = useState(prevHistory);
   const navigate = useNavigate();
-  const { state } = useLocation();
 
+  //? form submission handler to send search to api & call functions to ingest resulting data
   const fillSearchResults = async () => {
     searchAlgolia().then((ResData) => {
       try {
@@ -29,28 +35,28 @@ const Search = () => {
     });
   };
 
+  //? query API
   const searchAlgolia = async () => {
     let baseURL = 'http://hn.algolia.com/api/v1/search?query=';
-    console.log('...searching -- ' + baseURL + searchText);
     let response = await fetch(baseURL + searchText, {
       method: 'GET',
     });
-    //console.log(response.clone().json());
     return response.json();
   };
 
+  //? update history state
   const addHistory = (hits) => {
-    let newHistory = { ...state.resultHistory, ...resultHistory };
-    console.log(hits);
+    let newHistory;
+    try {
+      newHistory = { ...state.resultHistory, ...resultHistory };
+    } catch (err) {
+      console.log(err);
+      newHistory = {};
+    }
+
     newHistory[searchText] = hits;
     setResultHistory({ ...newHistory });
-    console.log(resultHistory);
   };
-
-  useEffect(() => {
-    console.log('use effect ran');
-    console.log(state);
-  });
 
   return (
     <div className="container-fluid bg-dark text-light p-5 text-center">
@@ -93,7 +99,6 @@ const Search = () => {
           variant="primary"
           onClick={(e) => {
             e.preventDefault();
-            console.log(state);
             navigate('/history', { state: { resultHistory } });
           }}
         >

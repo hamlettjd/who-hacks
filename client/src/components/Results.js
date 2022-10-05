@@ -1,10 +1,9 @@
-import { useState } from 'react';
 import Result from './Result';
 
+//? build a result component for each matching item with the search.
 const Results = ({ searchResults }) => {
   let formattedResults = [];
   for (let i = 0; i < Object.keys(searchResults).length; i++) {
-    //console.log(searchResults[i]);
     formattedResults.push(
       <Result
         key={searchResults[i].author + 'result' + i}
